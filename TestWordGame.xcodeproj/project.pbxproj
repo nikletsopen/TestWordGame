@@ -14,6 +14,13 @@
 		FAE1AB582A98EE6300A05D7A /* TestWordGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB572A98EE6300A05D7A /* TestWordGameTests.swift */; };
 		FAE1AB622A98EE6300A05D7A /* TestWordGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB612A98EE6300A05D7A /* TestWordGameUITests.swift */; };
 		FAE1AB642A98EE6300A05D7A /* TestWordGameUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB632A98EE6300A05D7A /* TestWordGameUITestsLaunchTests.swift */; };
+		FAE1AB722A98F95400A05D7A /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = FAE1AB712A98F95400A05D7A /* ComposableArchitecture */; };
+		FAE1AB742A990F5D00A05D7A /* words.json in Resources */ = {isa = PBXBuildFile; fileRef = FAE1AB732A990F5D00A05D7A /* words.json */; };
+		FAE1AB762A99F96D00A05D7A /* AttemptTaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB752A99F96D00A05D7A /* AttemptTaskService.swift */; };
+		FAE1AB792A99FA7F00A05D7A /* WordPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB782A99FA7F00A05D7A /* WordPair.swift */; };
+		FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB7A2A99FA8900A05D7A /* AttemptTask.swift */; };
+		FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */; };
+		FAE1AB842A9A055000A05D7A /* ErrorLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +51,12 @@
 		FAE1AB5D2A98EE6300A05D7A /* TestWordGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestWordGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAE1AB612A98EE6300A05D7A /* TestWordGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWordGameUITests.swift; sourceTree = "<group>"; };
 		FAE1AB632A98EE6300A05D7A /* TestWordGameUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWordGameUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FAE1AB732A990F5D00A05D7A /* words.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = words.json; sourceTree = "<group>"; };
+		FAE1AB752A99F96D00A05D7A /* AttemptTaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttemptTaskService.swift; sourceTree = "<group>"; };
+		FAE1AB782A99FA7F00A05D7A /* WordPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPair.swift; sourceTree = "<group>"; };
+		FAE1AB7A2A99FA8900A05D7A /* AttemptTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttemptTask.swift; sourceTree = "<group>"; };
+		FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPairsFeature.swift; sourceTree = "<group>"; };
+		FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorLogger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAE1AB722A98F95400A05D7A /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,8 +108,13 @@
 		FAE1AB452A98EE6200A05D7A /* TestWordGame */ = {
 			isa = PBXGroup;
 			children = (
+				FAE1AB822A9A053B00A05D7A /* Utils */,
+				FAE1AB802A9A018400A05D7A /* Presentation */,
+				FAE1AB7D2A99FB6A00A05D7A /* Reducers */,
+				FAE1AB7C2A99FB4500A05D7A /* Services */,
+				FAE1AB772A99FA5E00A05D7A /* Models */,
 				FAE1AB462A98EE6200A05D7A /* TestWordGameApp.swift */,
-				FAE1AB482A98EE6200A05D7A /* ContentView.swift */,
+				FAE1AB732A990F5D00A05D7A /* words.json */,
 				FAE1AB4A2A98EE6300A05D7A /* Assets.xcassets */,
 				FAE1AB4C2A98EE6300A05D7A /* Preview Content */,
 			);
@@ -127,6 +146,47 @@
 			path = TestWordGameUITests;
 			sourceTree = "<group>";
 		};
+		FAE1AB772A99FA5E00A05D7A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1AB782A99FA7F00A05D7A /* WordPair.swift */,
+				FAE1AB7A2A99FA8900A05D7A /* AttemptTask.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FAE1AB7C2A99FB4500A05D7A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1AB752A99F96D00A05D7A /* AttemptTaskService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FAE1AB7D2A99FB6A00A05D7A /* Reducers */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */,
+			);
+			path = Reducers;
+			sourceTree = "<group>";
+		};
+		FAE1AB802A9A018400A05D7A /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1AB482A98EE6200A05D7A /* ContentView.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		FAE1AB822A9A053B00A05D7A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +203,9 @@
 			dependencies = (
 			);
 			name = TestWordGame;
+			packageProductDependencies = (
+				FAE1AB712A98F95400A05D7A /* ComposableArchitecture */,
+			);
 			productName = TestWordGame;
 			productReference = FAE1AB432A98EE6200A05D7A /* TestWordGame.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +278,9 @@
 				Base,
 			);
 			mainGroup = FAE1AB3A2A98EE6200A05D7A;
+			packageReferences = (
+				FAE1AB702A98F95400A05D7A /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = FAE1AB442A98EE6200A05D7A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,6 +297,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAE1AB742A990F5D00A05D7A /* words.json in Resources */,
 				FAE1AB4E2A98EE6300A05D7A /* Preview Assets.xcassets in Resources */,
 				FAE1AB4B2A98EE6300A05D7A /* Assets.xcassets in Resources */,
 			);
@@ -257,8 +324,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */,
 				FAE1AB492A98EE6200A05D7A /* ContentView.swift in Sources */,
+				FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */,
+				FAE1AB792A99FA7F00A05D7A /* WordPair.swift in Sources */,
+				FAE1AB762A99F96D00A05D7A /* AttemptTaskService.swift in Sources */,
 				FAE1AB472A98EE6200A05D7A /* TestWordGameApp.swift in Sources */,
+				FAE1AB842A9A055000A05D7A /* ErrorLogger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,6 +655,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FAE1AB702A98F95400A05D7A /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FAE1AB712A98F95400A05D7A /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAE1AB702A98F95400A05D7A /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FAE1AB3B2A98EE6200A05D7A /* Project object */;
 }
