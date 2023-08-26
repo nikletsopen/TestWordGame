@@ -9,6 +9,8 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ContentView: View {
+    @Environment(\.scenePhase) var scenePhase
+    
     let store: StoreOf<WordPairsFeature>
     
     var body: some View {
@@ -64,7 +66,13 @@ struct ContentView: View {
             .padding()
             .onAppear{
                 viewStore.send(.fetchTasks)
+                viewStore.send(.startTimer)
             }
+            .onChange(of: scenePhase, perform: { newPhase in
+                if newPhase == .active && viewStore.shouldRestart {
+                    viewStore.send(.restartGame)
+                }
+            })
         }
     }
 }

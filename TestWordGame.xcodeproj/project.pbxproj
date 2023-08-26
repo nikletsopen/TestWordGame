@@ -21,6 +21,7 @@
 		FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB7A2A99FA8900A05D7A /* AttemptTask.swift */; };
 		FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */; };
 		FAE1AB842A9A055000A05D7A /* ErrorLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */; };
+		FAE1AB862A9A33D900A05D7A /* AppClosingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		FAE1AB7A2A99FA8900A05D7A /* AttemptTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttemptTask.swift; sourceTree = "<group>"; };
 		FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPairsFeature.swift; sourceTree = "<group>"; };
 		FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorLogger.swift; sourceTree = "<group>"; };
+		FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClosingHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */,
+				FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */,
+				FAE1AB862A9A33D900A05D7A /* AppClosingHelper.swift in Sources */,
 				FAE1AB492A98EE6200A05D7A /* ContentView.swift in Sources */,
 				FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */,
 				FAE1AB792A99FA7F00A05D7A /* WordPair.swift in Sources */,
