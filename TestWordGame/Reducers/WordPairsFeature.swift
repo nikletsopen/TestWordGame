@@ -18,6 +18,7 @@ struct WordPairsFeature: Reducer {
         var wrongAttemptsCount = 0
         var timerTicksCount = 0
         var shouldRestart = false
+        @PresentationState var resultsAlert: AlertState<Action.Alert>?
     }
     
     enum Action {
@@ -29,9 +30,16 @@ struct WordPairsFeature: Reducer {
         case startTimer
         case timerTicked
         case stopTimer
+        case showResultsAlert(PresentationAction<Alert>)
         case endGame
+        case closeApp
         case getReadyForRestart
         case restartGame
+        
+        enum Alert {
+            case restartGame
+            case closeApp
+        }
     }
     
     private enum CancelId {
@@ -62,22 +70,17 @@ struct WordPairsFeature: Reducer {
                     state.correctAttemptsCount += 1
                     return .send(.showNext)
                 } else {
-                    return .concatenate([
-                        .send(.processWrongAttempt),
-                        .send(.showNext)
-                    ])
+                    return .send(.processWrongAttempt)
                 }
             case .wrongButtonTapped:
                 if state.attemptTasks[state.currentIndex].isCorrect {
-                    return .concatenate([
-                        .send(.processWrongAttempt),
-                        .send(.showNext)
-                    ])
+                    return .send(.processWrongAttempt)
                 } else {
                     state.correctAttemptsCount += 1
                     return .send(.showNext)
                 }
             case .showNext:
+                state.timerTicksCount = 0
                 state.currentIndex += 1
                 
                 // If reached the end, start all over again 
@@ -104,7 +107,6 @@ struct WordPairsFeature: Reducer {
             case .timerTicked:
                 state.timerTicksCount += 1
                 if state.timerTicksCount > Constants.maxAttemptTime {
-                    state.timerTicksCount = 0 
                     return .send(.processWrongAttempt)
                 } else {
                     return .none
@@ -116,9 +118,44 @@ struct WordPairsFeature: Reducer {
                 if state.wrongAttemptsCount >= Constants.maxWrongAttempts {
                     return .send(.endGame)
                 } else {
-                    return .none
+                    return .send(.showNext)
                 }
+            case .showResultsAlert(.presented(.restartGame)):
+                return .send(.restartGame)
+            case .showResultsAlert(.presented(.closeApp)):
+                return .send(.closeApp)
+            case .showResultsAlert(.dismiss):
+                state.resultsAlert = nil
+                return .none
             case .endGame:
+                let correctAttemptsCount = state.correctAttemptsCount
+                let wrongAttemptsCount = state.wrongAttemptsCount
+                
+                state.resultsAlert = AlertState {
+                    TextState("Game over")
+                } actions: {
+                    ButtonState(
+                        role: .none, action: .closeApp
+                    ) {
+                        TextState("Close App")
+                    }
+                    
+                    ButtonState(
+                        role: .cancel, action: .restartGame
+                    ) {
+                        TextState("Try Again")
+                    }
+                } message: {
+                    TextState(
+                        """
+                        Want to try again? You current result:
+                        \(correctAttemptsCount) correct, \(wrongAttemptsCount) wrong.
+                        """
+                    )
+                }
+                
+                return .send(.stopTimer)
+            case .closeApp:
                 appClosingHelper.close()
                 
                 // Wait for a fraction of second, so the user does not see when state gets cleaned

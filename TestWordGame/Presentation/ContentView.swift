@@ -30,16 +30,17 @@ struct ContentView: View {
 
                 VStack {
                     Text(viewStore.currentSource)
-                        .font(.system(size: 24.0))
+                        .font(.system(size: 36.0))
                         .padding()
                     Text(viewStore.currentTranslation)
+                        .font(.system(size: 24.0))
                 }
 
                 Spacer()
 
                 HStack(spacing: 16) {
                     Button {
-                        viewStore.send(.correctButtonTapped)
+                        viewStore.send(.correctButtonTapped, animation: .linear)
                     } label: {
                         Text("Correct").bold()
                     }
@@ -52,7 +53,7 @@ struct ContentView: View {
                     Spacer()
 
                     Button {
-                        viewStore.send(.wrongButtonTapped)
+                        viewStore.send(.wrongButtonTapped, animation: .linear)
                     } label: {
                         Text("Wrong").bold()
                     }
@@ -73,19 +74,24 @@ struct ContentView: View {
                     viewStore.send(.restartGame)
                 }
             })
+            .alert(store: self.store.scope(
+                state: \.$resultsAlert,
+                action: { .showResultsAlert($0)}))
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(
-            store: Store(
-                initialState: WordPairsFeature.State(),
-                reducer: {
-                    WordPairsFeature()
-                })
-        )
+        let previewStore = Store(
+            initialState: WordPairsFeature.State(),
+            reducer: {
+                WordPairsFeature()
+            },
+            withDependencies: {
+                $0.continuousClock = TestClock()
+            })
+        ContentView(store: previewStore)
     }
 }
 
