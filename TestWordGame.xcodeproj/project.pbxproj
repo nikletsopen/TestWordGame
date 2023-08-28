@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA7D56412A9CDB7E005835FF /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7D56402A9CDB7E005835FF /* ResultsView.swift */; };
+		FA7D56472A9CDC0A005835FF /* AnswerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7D56462A9CDC0A005835FF /* AnswerButtonView.swift */; };
 		FAE1AB472A98EE6200A05D7A /* TestWordGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB462A98EE6200A05D7A /* TestWordGameApp.swift */; };
 		FAE1AB492A98EE6200A05D7A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB482A98EE6200A05D7A /* ContentView.swift */; };
 		FAE1AB4B2A98EE6300A05D7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAE1AB4A2A98EE6300A05D7A /* Assets.xcassets */; };
@@ -43,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FA7D56402A9CDB7E005835FF /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		FA7D56462A9CDC0A005835FF /* AnswerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerButtonView.swift; sourceTree = "<group>"; };
 		FAE1AB432A98EE6200A05D7A /* TestWordGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestWordGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAE1AB462A98EE6200A05D7A /* TestWordGameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWordGameApp.swift; sourceTree = "<group>"; };
 		FAE1AB482A98EE6200A05D7A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -180,6 +184,8 @@
 			isa = PBXGroup;
 			children = (
 				FAE1AB482A98EE6200A05D7A /* ContentView.swift */,
+				FA7D56402A9CDB7E005835FF /* ResultsView.swift */,
+				FA7D56462A9CDC0A005835FF /* AnswerButtonView.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -333,6 +339,8 @@
 				FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */,
 				FAE1AB882A9CA20900A05D7A /* AppConstants.swift in Sources */,
 				FAE1AB862A9A33D900A05D7A /* AppClosingHelper.swift in Sources */,
+				FA7D56472A9CDC0A005835FF /* AnswerButtonView.swift in Sources */,
+				FA7D56412A9CDB7E005835FF /* ResultsView.swift in Sources */,
 				FAE1AB492A98EE6200A05D7A /* ContentView.swift in Sources */,
 				FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */,
 				FAE1AB792A99FA7F00A05D7A /* WordPair.swift in Sources */,

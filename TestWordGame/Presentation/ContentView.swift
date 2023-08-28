@@ -9,6 +9,16 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ContentView: View {
+    
+    // MARK: - Constants
+    
+    private enum Constants {
+        // To start and stop outside of the screen bounds
+        static let extraYPosition = 80.0
+    }
+    
+    // MARK: - State
+    
     @Environment(\.scenePhase) var scenePhase
     
     let store: StoreOf<WordPairsFeature>
@@ -31,7 +41,9 @@ struct ContentView: View {
     
     @State private var translationPositionY: CGFloat = 0
     @State private var translationFontSize: CGFloat = 24.0
-   
+    
+    // MARK: - Body
+    
     var body: some View {
         WithViewStore(self.store, observe: ViewState.init) { viewStore in
             ZStack {
@@ -40,33 +52,21 @@ struct ContentView: View {
                         .font(.system(size: translationFontSize))
                         .position(x: proxy.size.width / 2, y: translationPositionY)
                         .onChange(of: viewStore.currentTranslation) { newValue in
-                            // Start above the screen
-                            translationPositionY = -80
+                            translationPositionY = -Constants.extraYPosition
                             translationFontSize = 24.0
                             
                             withAnimation(.easeIn(duration: Double(AppConstants.maxAttemptTime))) {
-                                // Finish bellow the screen
-                                translationPositionY = proxy.size.height + 80
+                                translationPositionY = proxy.size.height + Constants.extraYPosition
                                 translationFontSize = 48.0
                             }
                         }
                         .animation(.easeIn(duration: 0.2), value: viewStore.currentTranslation)
-                    
                 }
                 
                 VStack {
-                    HStack {
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 6) {
-                            Text("Correct attempts: \(viewStore.correctAttemptsCount)")
-                                .fontWeight(.bold)
-                            Text("Wrong attempts: \(viewStore.wrongAttemptsCount)")
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .background(.thinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 16.0))
-                    }
+                    ResultsView(
+                        correctAttemptsCount: viewStore.correctAttemptsCount,
+                        wrongAttemptsCount: viewStore.wrongAttemptsCount)
                     
                     Spacer()
                     
@@ -80,32 +80,9 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    HStack(spacing: 16) {
-                        Button {
-                            viewStore.send(.correctButtonTapped)
-                        } label: {
-                            Text("Correct").bold()
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(.green)
-                                .clipShape(RoundedRectangle(cornerRadius: 16.0))
-                        }
-                       
-                        
-                        Spacer()
-                        
-                        Button {
-                            viewStore.send(.wrongButtonTapped)
-                        } label: {
-                            Text("Wrong").bold()
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(.pink)
-                                .clipShape(RoundedRectangle(cornerRadius: 16.0))
-                        }
-                    }
+                    AnswerButtonView(
+                        correctButtonHandler: {viewStore.send(.correctButtonTapped)},
+                        wrongButtonHandler: {viewStore.send(.wrongButtonTapped)})
                 }
                 .padding()
             }
@@ -138,4 +115,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(store: previewStore)
     }
 }
-
