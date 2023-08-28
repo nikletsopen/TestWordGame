@@ -26,4 +26,11 @@ There are several things I'd like to improve. Below they are listed by priority:
   - Use "exhaustivity" param to make test more concise
   - Write more tests
   - Improve falling animation
-  - Make the false asnwers percentage adjustable 
+  - Make the false asnwers percentage adjustable
+
+### Preview 
+
+https://github.com/nikletsopen/TestWordGame/assets/48431338/b44d909a-fb94-4a19-b7ee-108f7fb60c31
+
+
+
