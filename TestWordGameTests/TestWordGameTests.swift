@@ -73,9 +73,7 @@ final class TestWordGameTests: XCTestCase {
             $0.currentTranslation = testTasks[0].translation
         }
         
-        await store.send(.wrongButtonTapped)
-        
-        await store.receive(.processWrongAttempt) {
+        await store.send(.wrongButtonTapped) {
             $0.wrongAttemptsCount = 1
         }
         
@@ -136,9 +134,7 @@ final class TestWordGameTests: XCTestCase {
             $0.currentTranslation = testTasks[0].translation
         }
         
-        await store.send(.wrongButtonTapped)
-        
-        await store.receive(.processWrongAttempt) {
+        await store.send(.wrongButtonTapped) {
             $0.wrongAttemptsCount = 1
         }
         
@@ -149,9 +145,7 @@ final class TestWordGameTests: XCTestCase {
             $0.currentTranslation = testTasks[1].translation
         }
         
-        await store.send(.wrongButtonTapped)
-        
-        await store.receive(.processWrongAttempt) {
+        await store.send(.wrongButtonTapped) {
             $0.wrongAttemptsCount = 2
         }
         
@@ -162,9 +156,7 @@ final class TestWordGameTests: XCTestCase {
             $0.currentTranslation = testTasks[2].translation
         }
         
-        await store.send(.wrongButtonTapped)
-        
-        await store.receive(.processWrongAttempt) {
+        await store.send(.wrongButtonTapped) {
             $0.wrongAttemptsCount = 3
         }
         
@@ -238,9 +230,6 @@ final class TestWordGameTests: XCTestCase {
         await clock.advance(by: .seconds(1))
         await store.receive(.timerTicked) {
             $0.timerTicksCount = 5
-        }
-
-        await store.receive(.processWrongAttempt) {
             $0.wrongAttemptsCount = 1
         }
 

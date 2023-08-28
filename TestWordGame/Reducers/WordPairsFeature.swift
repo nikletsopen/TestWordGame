@@ -25,7 +25,6 @@ struct WordPairsFeature: Reducer {
         case fetchTasks
         case correctButtonTapped
         case wrongButtonTapped
-        case processWrongAttempt
         case showNext
         case startTimer
         case timerTicked
@@ -64,11 +63,11 @@ struct WordPairsFeature: Reducer {
                     state.correctAttemptsCount += 1
                     return .send(.showNext)
                 } else {
-                    return .send(.processWrongAttempt)
+                    return processWrongAttempt(state: &state)
                 }
             case .wrongButtonTapped:
                 if state.attemptTasks[state.currentIndex].isCorrect {
-                    return .send(.processWrongAttempt)
+                    return processWrongAttempt(state: &state)
                 } else {
                     state.correctAttemptsCount += 1
                     return .send(.showNext)
@@ -101,19 +100,12 @@ struct WordPairsFeature: Reducer {
             case .timerTicked:
                 state.timerTicksCount += 1
                 if state.timerTicksCount >= AppConstants.maxAttemptTime {
-                    return .send(.processWrongAttempt)
+                    return processWrongAttempt(state: &state)
                 } else {
                     return .none
                 }
             case .stopTimer:
                 return .cancel(id: CancelId.timer)
-            case .processWrongAttempt:
-                state.wrongAttemptsCount += 1
-                if state.wrongAttemptsCount >= AppConstants.maxWrongAttempts {
-                    return .send(.endGame)
-                } else {
-                    return .send(.showNext)
-                }
             case .showResultsAlert(.presented(.restartGame)):
                 return .send(.restartGame)
             case .showResultsAlert(.presented(.closeApp)):
@@ -169,6 +161,15 @@ struct WordPairsFeature: Reducer {
                     .send(.startTimer)
                 ])
             }
+        }
+    }
+    
+    private func processWrongAttempt(state: inout State) -> Effect<Action> {
+        state.wrongAttemptsCount += 1
+        if state.wrongAttemptsCount >= AppConstants.maxWrongAttempts {
+            return .send(.endGame)
+        } else {
+            return .send(.showNext)
         }
     }
 }
