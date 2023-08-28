@@ -28,8 +28,7 @@ struct ContentView: View {
                             translationPositionY = -80
                             translationFontSize = 24.0
                             
-                            // Add a short visual delay to sync better with timer 
-                            withAnimation(.easeIn(duration: Double(AppConstants.maxAttemptTime) + 0.8)) {
+                            withAnimation(.easeIn(duration: Double(AppConstants.maxAttemptTime))) {
                                 // Finish bellow the screen
                                 translationPositionY = proxy.size.height + 80
                                 translationFontSize = 48.0

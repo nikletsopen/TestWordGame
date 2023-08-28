@@ -21,7 +21,7 @@ struct WordPairsFeature: Reducer {
         @PresentationState var resultsAlert: AlertState<Action.Alert>?
     }
     
-    enum Action {
+    enum Action: Equatable {
         case fetchTasks
         case correctButtonTapped
         case wrongButtonTapped
@@ -100,7 +100,7 @@ struct WordPairsFeature: Reducer {
                 .cancellable(id: CancelId.timer)
             case .timerTicked:
                 state.timerTicksCount += 1
-                if state.timerTicksCount > AppConstants.maxAttemptTime {
+                if state.timerTicksCount >= AppConstants.maxAttemptTime {
                     return .send(.processWrongAttempt)
                 } else {
                     return .none
