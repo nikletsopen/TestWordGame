@@ -16,7 +16,7 @@ About 6 hours of concetrated work
   - When user "quits" - reset the state after he comes back (an app becomes active again)
 ### Decisions made because of restricted time: 
   - Kept all logic in one reducer
-  - Falling anuimation is not linked directly to timer, but uses the same global constant 
+  - Falling animation is not linked directly to timer, but uses the same global constant 
 ### What would be the first thing to improve or add if there had been more time:
 There are several things I'd like to improve. Below they are listed by priority: 
   - Break the reducer into smaller pieces
