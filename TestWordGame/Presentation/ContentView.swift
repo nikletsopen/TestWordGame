@@ -13,58 +13,87 @@ struct ContentView: View {
     
     let store: StoreOf<WordPairsFeature>
     
+    @State private var translationPositionY: CGFloat = 0
+    @State private var translationFontSize: CGFloat = 24.0
+   
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {
-                HStack {
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 6) {
-                        Text("Correct attempts: \(viewStore.correctAttemptsCount)")
-                            .fontWeight(.bold)
-                        Text("Wrong attempts: \(viewStore.wrongAttemptsCount)")
-                            .fontWeight(.bold)
-                    }
+            ZStack {
+                GeometryReader { proxy in
+                    Text(viewStore.currentTranslation)
+                        .font(.system(size: translationFontSize))
+                        .position(x: proxy.size.width / 2, y: translationPositionY)
+                        .onChange(of: viewStore.currentTranslation) { newValue in
+                            // Start above the screen
+                            translationPositionY = -80
+                            translationFontSize = 24.0
+                            
+                            // Add a short visual delay to sync better with timer 
+                            withAnimation(.easeIn(duration: Double(AppConstants.maxAttemptTime) + 0.8)) {
+                                // Finish bellow the screen
+                                translationPositionY = proxy.size.height + 80
+                                translationFontSize = 48.0
+                            }
+                        }
+                        .animation(.easeIn(duration: 0.2), value: viewStore.currentTranslation)
+                    
                 }
-
-                Spacer()
-
+                
                 VStack {
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 6) {
+                            Text("Correct attempts: \(viewStore.correctAttemptsCount)")
+                                .fontWeight(.bold)
+                            Text("Wrong attempts: \(viewStore.wrongAttemptsCount)")
+                                .fontWeight(.bold)
+                        }
+                        .padding()
+                        .background(.thinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                    }
+                    
+                    Spacer()
+                    
                     Text(viewStore.currentSource)
                         .font(.system(size: 36.0))
-                        .padding()
-                    Text(viewStore.currentTranslation)
-                        .font(.system(size: 24.0))
-                }
-
-                Spacer()
-
-                HStack(spacing: 16) {
-                    Button {
-                        viewStore.send(.correctButtonTapped, animation: .linear)
-                    } label: {
-                        Text("Correct").bold()
-                    }
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.green)
-                    .clipShape(Capsule())
-
+                        .padding(.vertical, 16)
+                        .padding(.horizontal, 48)
+                        .background(.cyan)
+                        .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                        .animation(.easeIn(duration: 0.2), value: viewStore.currentSource)
+                    
                     Spacer()
-
-                    Button {
-                        viewStore.send(.wrongButtonTapped, animation: .linear)
-                    } label: {
-                        Text("Wrong").bold()
+                    
+                    HStack(spacing: 16) {
+                        Button {
+                            viewStore.send(.correctButtonTapped)
+                        } label: {
+                            Text("Correct").bold()
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(.green)
+                                .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                        }
+                       
+                        
+                        Spacer()
+                        
+                        Button {
+                            viewStore.send(.wrongButtonTapped)
+                        } label: {
+                            Text("Wrong").bold()
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(.pink)
+                                .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                        }
                     }
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.pink)
-                    .clipShape(Capsule())
                 }
+                .padding()
             }
-            .padding()
             .onAppear{
                 viewStore.send(.fetchTasks)
                 viewStore.send(.startTimer)

@@ -46,12 +46,6 @@ struct WordPairsFeature: Reducer {
         case timer
     }
     
-    private enum Constants {
-        static let maxAttemptTime = 5
-        static let maxWrongAttempts = 3
-        static let maxAttempts = 15
-    }
-    
     @Dependency(\.attemptTaskService) var attemptTaskService
     @Dependency(\.continuousClock) var clock
     @Dependency(\.appClosingHelper) var appClosingHelper
@@ -89,7 +83,7 @@ struct WordPairsFeature: Reducer {
                     return .send(.fetchTasks)
                 }
                 
-                guard state.currentIndex < Constants.maxAttempts else {
+                guard state.currentIndex < AppConstants.maxAttempts else {
                     return .send(.endGame)
                 }
                 
@@ -106,7 +100,7 @@ struct WordPairsFeature: Reducer {
                 .cancellable(id: CancelId.timer)
             case .timerTicked:
                 state.timerTicksCount += 1
-                if state.timerTicksCount > Constants.maxAttemptTime {
+                if state.timerTicksCount > AppConstants.maxAttemptTime {
                     return .send(.processWrongAttempt)
                 } else {
                     return .none
@@ -115,7 +109,7 @@ struct WordPairsFeature: Reducer {
                 return .cancel(id: CancelId.timer)
             case .processWrongAttempt:
                 state.wrongAttemptsCount += 1
-                if state.wrongAttemptsCount >= Constants.maxWrongAttempts {
+                if state.wrongAttemptsCount >= AppConstants.maxWrongAttempts {
                     return .send(.endGame)
                 } else {
                     return .send(.showNext)

@@ -22,6 +22,7 @@
 		FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */; };
 		FAE1AB842A9A055000A05D7A /* ErrorLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */; };
 		FAE1AB862A9A33D900A05D7A /* AppClosingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */; };
+		FAE1AB882A9CA20900A05D7A /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB872A9CA20900A05D7A /* AppConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPairsFeature.swift; sourceTree = "<group>"; };
 		FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorLogger.swift; sourceTree = "<group>"; };
 		FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClosingHelper.swift; sourceTree = "<group>"; };
+		FAE1AB872A9CA20900A05D7A /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				FAE1AB732A990F5D00A05D7A /* words.json */,
 				FAE1AB4A2A98EE6300A05D7A /* Assets.xcassets */,
 				FAE1AB4C2A98EE6300A05D7A /* Preview Content */,
+				FAE1AB872A9CA20900A05D7A /* AppConstants.swift */,
 			);
 			path = TestWordGame;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAE1AB7F2A99FB9D00A05D7A /* WordPairsFeature.swift in Sources */,
+				FAE1AB882A9CA20900A05D7A /* AppConstants.swift in Sources */,
 				FAE1AB862A9A33D900A05D7A /* AppClosingHelper.swift in Sources */,
 				FAE1AB492A98EE6200A05D7A /* ContentView.swift in Sources */,
 				FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */,
