@@ -30,7 +30,9 @@ There are several things I'd like to improve. Below they are listed by priority:
 
 ### Preview 
 
-https://github.com/nikletsopen/TestWordGame/assets/48431338/b44d909a-fb94-4a19-b7ee-108f7fb60c31
+https://github.com/nikletsopen/TestWordGame/assets/48431338/28bbff42-9671-4b75-89de-1315201b446a
+
+
 
 
 
