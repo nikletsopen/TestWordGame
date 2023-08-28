@@ -13,11 +13,27 @@ struct ContentView: View {
     
     let store: StoreOf<WordPairsFeature>
     
+    struct ViewState: Equatable {
+        let currentSource: String
+        let currentTranslation: String
+        let correctAttemptsCount: Int
+        let wrongAttemptsCount: Int
+        let shouldRestart: Bool
+        
+        init(state: WordPairsFeature.State) {
+            self.currentSource = state.currentSource
+            self.currentTranslation = state.currentTranslation
+            self.correctAttemptsCount = state.correctAttemptsCount
+            self.wrongAttemptsCount = state.wrongAttemptsCount
+            self.shouldRestart = state.shouldRestart
+        }
+    }
+    
     @State private var translationPositionY: CGFloat = 0
     @State private var translationFontSize: CGFloat = 24.0
    
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(self.store, observe: ViewState.init) { viewStore in
             ZStack {
                 GeometryReader { proxy in
                     Text(viewStore.currentTranslation)
