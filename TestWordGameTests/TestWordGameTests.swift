@@ -243,6 +243,38 @@ final class TestWordGameTests: XCTestCase {
         await store.send(.stopTimer)
     }
     
+    func testRestart() async {
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.attemptTaskService.fetch = {
+                testTasks
+            }
+            $0.continuousClock = TestClock() 
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.send(.restartGame) {
+            $0.attemptTasks = []
+            $0.currentSource = ""
+            $0.currentTranslation = ""
+        }
+        
+        await store.receive(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.receive(.startTimer)
+        await store.send(.stopTimer)
+    }
+    
 }
 
 private let testTasks = [
