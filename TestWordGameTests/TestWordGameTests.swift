@@ -5,32 +5,261 @@
 //  Created by Nikita Timonin on 25.08.2023.
 //
 
+import ComposableArchitecture
 import XCTest
 @testable import TestWordGame
 
+@MainActor
 final class TestWordGameTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testFetchAttempts() async {
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.attemptTaskService.fetch = {
+                testTasks
+            }
+            $0.continuousClock = UnimplementedClock()
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
         }
     }
+    
+    func testTrueCorrectAnswer() async {
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.attemptTaskService.fetch = {
+                testTasks
+            }
+            $0.continuousClock = UnimplementedClock()
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.send(.correctButtonTapped) {
+            $0.correctAttemptsCount = 1
+        }
 
+        await store.receive(.showNext) {
+            $0.timerTicksCount = 0
+            $0.currentIndex = 1
+            $0.currentSource = testTasks[1].source
+            $0.currentTranslation = testTasks[1].translation
+        }
+    }
+    
+    func testFalseWrongAsnwer() async {
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.attemptTaskService.fetch = {
+                testTasks
+            }
+            $0.continuousClock = UnimplementedClock()
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.send(.wrongButtonTapped)
+        
+        await store.receive(.processWrongAttempt) {
+            $0.wrongAttemptsCount = 1
+        }
+        
+        await store.receive(.showNext) {
+            $0.timerTicksCount = 0
+            $0.currentIndex = 1
+            $0.currentSource = testTasks[1].source
+            $0.currentTranslation = testTasks[1].translation
+        }
+    }
+    
+    func testCorrectWrongAsnwer() async {
+        let testTasks = [
+            AttemptTask(source: "class", translation: "vacaciones", isCorrect: false),
+            AttemptTask(source: "primary school", translation: "escuela primaria", isCorrect: true),
+        ]
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.attemptTaskService.fetch = {
+               testTasks
+            }
+            $0.continuousClock = UnimplementedClock()
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.send(.wrongButtonTapped) {
+            $0.correctAttemptsCount = 1
+        }
+        
+        
+        await store.receive(.showNext) {
+            $0.timerTicksCount = 0
+            $0.currentIndex = 1
+            $0.currentSource = testTasks[1].source
+            $0.currentTranslation = testTasks[1].translation
+        }
+    }
+    
+    func testWrongAttemptsGameOver() async {
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.attemptTaskService.fetch = {
+                testTasks
+            }
+            $0.continuousClock = UnimplementedClock()
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.send(.wrongButtonTapped)
+        
+        await store.receive(.processWrongAttempt) {
+            $0.wrongAttemptsCount = 1
+        }
+        
+        await store.receive(.showNext) {
+            $0.timerTicksCount = 0
+            $0.currentIndex = 1
+            $0.currentSource = testTasks[1].source
+            $0.currentTranslation = testTasks[1].translation
+        }
+        
+        await store.send(.wrongButtonTapped)
+        
+        await store.receive(.processWrongAttempt) {
+            $0.wrongAttemptsCount = 2
+        }
+        
+        await store.receive(.showNext) {
+            $0.timerTicksCount = 0
+            $0.currentIndex = 2
+            $0.currentSource = testTasks[2].source
+            $0.currentTranslation = testTasks[2].translation
+        }
+        
+        await store.send(.wrongButtonTapped)
+        
+        await store.receive(.processWrongAttempt) {
+            $0.wrongAttemptsCount = 3
+        }
+        
+        await store.receive(.endGame) {
+            let correctAttemptsCount = $0.correctAttemptsCount
+            let wrongAttemptsCount = $0.wrongAttemptsCount
+            
+            $0.resultsAlert = AlertState {
+                TextState("Game over")
+            } actions: {
+                ButtonState(
+                    role: .none, action: .closeApp
+                ) {
+                    TextState("Close App")
+                }
+                
+                ButtonState(
+                    role: .cancel, action: .restartGame
+                ) {
+                    TextState("Try Again")
+                }
+            } message: {
+                TextState(
+                        """
+                        Want to try again? You current result:
+                        \(correctAttemptsCount) correct, \(wrongAttemptsCount) wrong.
+                        """
+                )
+            }
+        }
+        
+        await store.receive(.stopTimer)
+    }
+    
+    func testAttemptTimeout() async {
+        let clock = TestClock()
+        let store = TestStore(initialState: WordPairsFeature.State()) {
+            WordPairsFeature()
+        } withDependencies: {
+            $0.continuousClock = clock
+            $0.attemptTaskService.fetch = {
+                testTasks
+            }
+        }
+        
+        await store.send(.fetchTasks) {
+            $0.attemptTasks = testTasks
+            $0.currentSource = testTasks[0].source
+            $0.currentTranslation = testTasks[0].translation
+        }
+        
+        await store.send(.startTimer)
+        
+        await clock.advance(by: .seconds(1))
+ 
+        await store.receive(.timerTicked) {
+            $0.timerTicksCount = 1
+        }
+        await clock.advance(by: .seconds(1))
+        await store.receive(.timerTicked) {
+            $0.timerTicksCount = 2
+        }
+        await clock.advance(by: .seconds(1))
+        await store.receive(.timerTicked) {
+            $0.timerTicksCount = 3
+        }
+        await clock.advance(by: .seconds(1))
+        await store.receive(.timerTicked) {
+            $0.timerTicksCount = 4
+        }
+        await clock.advance(by: .seconds(1))
+        await store.receive(.timerTicked) {
+            $0.timerTicksCount = 5
+        }
+
+        await store.receive(.processWrongAttempt) {
+            $0.wrongAttemptsCount = 1
+        }
+
+        await store.receive(.showNext) {
+            $0.timerTicksCount = 0
+            $0.currentIndex = 1
+            $0.currentSource = testTasks[1].source
+            $0.currentTranslation = testTasks[1].translation
+        }
+        
+        await store.send(.stopTimer)
+    }
+    
 }
+
+private let testTasks = [
+    AttemptTask(source: "primary school", translation: "escuela primaria", isCorrect: true),
+    AttemptTask(source: "exercise book", translation: "cuaderno", isCorrect: true),
+    AttemptTask(source: "quiet", translation: "quieto", isCorrect: true),
+    AttemptTask(source: "primary school", translation: "escuela primaria", isCorrect: true),
+    AttemptTask(source: "class", translation: "vacaciones", isCorrect: false),
+]
