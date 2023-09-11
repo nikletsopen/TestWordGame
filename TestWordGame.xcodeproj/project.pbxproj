@@ -25,6 +25,7 @@
 		FAE1AB842A9A055000A05D7A /* ErrorLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */; };
 		FAE1AB862A9A33D900A05D7A /* AppClosingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */; };
 		FAE1AB882A9CA20900A05D7A /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE1AB872A9CA20900A05D7A /* AppConstants.swift */; };
+		FAF2BFE42AAF5D24009516CF /* TimerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF2BFE32AAF5D24009516CF /* TimerFeature.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		FAE1AB832A9A055000A05D7A /* ErrorLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorLogger.swift; sourceTree = "<group>"; };
 		FAE1AB852A9A33D800A05D7A /* AppClosingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClosingHelper.swift; sourceTree = "<group>"; };
 		FAE1AB872A9CA20900A05D7A /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		FAF2BFE32AAF5D24009516CF /* TimerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerFeature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				FAE1AB7E2A99FB9D00A05D7A /* WordPairsFeature.swift */,
+				FAF2BFE32AAF5D24009516CF /* TimerFeature.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				FA7D56472A9CDC0A005835FF /* AnswerButtonView.swift in Sources */,
 				FA7D56412A9CDB7E005835FF /* ResultsView.swift in Sources */,
 				FAE1AB492A98EE6200A05D7A /* ContentView.swift in Sources */,
+				FAF2BFE42AAF5D24009516CF /* TimerFeature.swift in Sources */,
 				FAE1AB7B2A99FA8900A05D7A /* AttemptTask.swift in Sources */,
 				FAE1AB792A99FA7F00A05D7A /* WordPair.swift in Sources */,
 				FAE1AB762A99F96D00A05D7A /* AttemptTaskService.swift in Sources */,
@@ -505,7 +509,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TestWordGame/Preview Content\"";
-				DEVELOPMENT_TEAM = KU53L26P5C;
+				DEVELOPMENT_TEAM = 787R52UJWY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -534,7 +538,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TestWordGame/Preview Content\"";
-				DEVELOPMENT_TEAM = KU53L26P5C;
+				DEVELOPMENT_TEAM = 787R52UJWY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

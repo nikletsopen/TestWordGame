@@ -50,7 +50,7 @@ final class TestWordGameTests: XCTestCase {
         }
 
         await store.receive(.showNext) {
-            $0.timerTicksCount = 0
+            $0.timer?.timerTicksCount = 0
             $0.currentIndex = 1
             $0.currentSource = testTasks[1].source
             $0.currentTranslation = testTasks[1].translation
@@ -78,7 +78,7 @@ final class TestWordGameTests: XCTestCase {
         }
         
         await store.receive(.showNext) {
-            $0.timerTicksCount = 0
+            $0.timer?.timerTicksCount = 0
             $0.currentIndex = 1
             $0.currentSource = testTasks[1].source
             $0.currentTranslation = testTasks[1].translation
@@ -111,7 +111,7 @@ final class TestWordGameTests: XCTestCase {
         
         
         await store.receive(.showNext) {
-            $0.timerTicksCount = 0
+            $0.timer?.timerTicksCount = 0
             $0.currentIndex = 1
             $0.currentSource = testTasks[1].source
             $0.currentTranslation = testTasks[1].translation
@@ -139,7 +139,7 @@ final class TestWordGameTests: XCTestCase {
         }
         
         await store.receive(.showNext) {
-            $0.timerTicksCount = 0
+            $0.timer?.timerTicksCount = 0
             $0.currentIndex = 1
             $0.currentSource = testTasks[1].source
             $0.currentTranslation = testTasks[1].translation
@@ -150,7 +150,7 @@ final class TestWordGameTests: XCTestCase {
         }
         
         await store.receive(.showNext) {
-            $0.timerTicksCount = 0
+            $0.timer?.timerTicksCount = 0
             $0.currentIndex = 2
             $0.currentSource = testTasks[2].source
             $0.currentTranslation = testTasks[2].translation
@@ -161,6 +161,7 @@ final class TestWordGameTests: XCTestCase {
         }
         
         await store.receive(.endGame) {
+            $0.timer = nil
             let correctAttemptsCount = $0.correctAttemptsCount
             let wrongAttemptsCount = $0.wrongAttemptsCount
             
@@ -187,8 +188,6 @@ final class TestWordGameTests: XCTestCase {
                 )
             }
         }
-        
-        await store.receive(.stopTimer)
     }
     
     func testAttemptTimeout() async {
@@ -202,45 +201,49 @@ final class TestWordGameTests: XCTestCase {
             }
         }
         
-        await store.send(.fetchTasks) {
+        await store.send(.startGame) {
+            $0.timer = TimerFeature.State()
+        }
+        
+        await store.receive(.fetchTasks) {
             $0.attemptTasks = testTasks
             $0.currentSource = testTasks[0].source
             $0.currentTranslation = testTasks[0].translation
         }
         
-        await store.send(.startTimer)
+        await store.receive(.timer(.startTimer))
         
         await clock.advance(by: .seconds(1))
  
-        await store.receive(.timerTicked) {
-            $0.timerTicksCount = 1
+        await store.receive(.timer(.delegate(.timerTicked))) {
+            $0.timer?.timerTicksCount = 1
         }
         await clock.advance(by: .seconds(1))
-        await store.receive(.timerTicked) {
-            $0.timerTicksCount = 2
+        await store.receive(.timer(.delegate(.timerTicked))) {
+            $0.timer?.timerTicksCount = 2
         }
         await clock.advance(by: .seconds(1))
-        await store.receive(.timerTicked) {
-            $0.timerTicksCount = 3
+        await store.receive(.timer(.delegate(.timerTicked))) {
+            $0.timer?.timerTicksCount = 3
         }
         await clock.advance(by: .seconds(1))
-        await store.receive(.timerTicked) {
-            $0.timerTicksCount = 4
+        await store.receive(.timer(.delegate(.timerTicked))) {
+            $0.timer?.timerTicksCount = 4
         }
         await clock.advance(by: .seconds(1))
-        await store.receive(.timerTicked) {
-            $0.timerTicksCount = 5
+        await store.receive(.timer(.delegate(.timerTicked))) {
+            $0.timer?.timerTicksCount = 5
             $0.wrongAttemptsCount = 1
         }
 
         await store.receive(.showNext) {
-            $0.timerTicksCount = 0
+            $0.timer?.timerTicksCount = 0
             $0.currentIndex = 1
             $0.currentSource = testTasks[1].source
             $0.currentTranslation = testTasks[1].translation
         }
         
-        await store.send(.stopTimer)
+        await store.send(.timer(.stopTimer))
     }
     
     func testRestart() async {
@@ -250,7 +253,7 @@ final class TestWordGameTests: XCTestCase {
             $0.attemptTaskService.fetch = {
                 testTasks
             }
-            $0.continuousClock = TestClock() 
+            $0.continuousClock = TestClock()
         }
         
         await store.send(.fetchTasks) {
@@ -259,10 +262,11 @@ final class TestWordGameTests: XCTestCase {
             $0.currentTranslation = testTasks[0].translation
         }
         
-        await store.send(.restartGame) {
+        await store.send(.startGame) {
             $0.attemptTasks = []
             $0.currentSource = ""
             $0.currentTranslation = ""
+            $0.timer = TimerFeature.State()
         }
         
         await store.receive(.fetchTasks) {
@@ -271,8 +275,9 @@ final class TestWordGameTests: XCTestCase {
             $0.currentTranslation = testTasks[0].translation
         }
         
-        await store.receive(.startTimer)
-        await store.send(.stopTimer)
+        await store.receive(.timer(.startTimer))
+        
+        await store.send(.timer(.stopTimer))
     }
     
 }

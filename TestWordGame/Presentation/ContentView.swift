@@ -67,7 +67,7 @@ struct ContentView: View {
                     ResultsView(
                         correctAttemptsCount: viewStore.correctAttemptsCount,
                         wrongAttemptsCount: viewStore.wrongAttemptsCount)
-                    
+                   
                     Spacer()
                     
                     Text(viewStore.currentSource)
@@ -87,12 +87,11 @@ struct ContentView: View {
                 .padding()
             }
             .onAppear{
-                viewStore.send(.fetchTasks)
-                viewStore.send(.startTimer)
+                viewStore.send(.startGame)
             }
             .onChange(of: scenePhase, perform: { newPhase in
                 if newPhase == .active && viewStore.shouldRestart {
-                    viewStore.send(.restartGame)
+                    viewStore.send(.startGame)
                 }
             })
             .alert(store: self.store.scope(

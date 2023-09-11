@@ -16,7 +16,7 @@ struct WordPairsFeature: Reducer {
         var currentTranslation = ""
         var correctAttemptsCount = 0
         var wrongAttemptsCount = 0
-        var timerTicksCount = 0
+        var timer: TimerFeature.State?
         var shouldRestart = false
         @PresentationState var resultsAlert: AlertState<Action.Alert>?
     }
@@ -25,15 +25,13 @@ struct WordPairsFeature: Reducer {
         case fetchTasks
         case correctButtonTapped
         case wrongButtonTapped
+        case timer(TimerFeature.Action)
         case showNext
-        case startTimer
-        case timerTicked
-        case stopTimer
         case showResultsAlert(PresentationAction<Alert>)
         case endGame
         case closeApp
         case getReadyForRestart
-        case restartGame
+        case startGame
         
         enum Alert {
             case restartGame
@@ -41,13 +39,9 @@ struct WordPairsFeature: Reducer {
         }
     }
     
-    private enum CancelId {
-        case timer
-    }
-    
     @Dependency(\.attemptTaskService) var attemptTaskService
-    @Dependency(\.continuousClock) var clock
     @Dependency(\.appClosingHelper) var appClosingHelper
+    @Dependency(\.continuousClock) var clock
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -73,10 +67,10 @@ struct WordPairsFeature: Reducer {
                     return .send(.showNext)
                 }
             case .showNext:
-                state.timerTicksCount = 0
+                state.timer?.timerTicksCount = 0
                 state.currentIndex += 1
                 
-                // If reached the end, start all over again 
+                // If reached the end, start all over again
                 guard state.currentIndex < state.attemptTasks.count else {
                     state.currentIndex = 0
                     return .send(.fetchTasks)
@@ -90,30 +84,15 @@ struct WordPairsFeature: Reducer {
                 state.currentSource = task.source
                 state.currentTranslation = task.translation
                 return .none
-            case .startTimer:
-                return .run { send in
-                    for await _ in self.clock.timer(interval: .seconds(1)) {
-                        await send(.timerTicked)
-                    }
-                }
-                .cancellable(id: CancelId.timer)
-            case .timerTicked:
-                state.timerTicksCount += 1
-                if state.timerTicksCount >= AppConstants.maxAttemptTime {
-                    return processWrongAttempt(state: &state)
-                } else {
-                    return .none
-                }
-            case .stopTimer:
-                return .cancel(id: CancelId.timer)
             case .showResultsAlert(.presented(.restartGame)):
-                return .send(.restartGame)
+                return .send(.startGame)
             case .showResultsAlert(.presented(.closeApp)):
                 return .send(.closeApp)
             case .showResultsAlert(.dismiss):
                 state.resultsAlert = nil
                 return .none
             case .endGame:
+                state.timer = nil
                 let correctAttemptsCount = state.correctAttemptsCount
                 let wrongAttemptsCount = state.wrongAttemptsCount
                 
@@ -140,27 +119,41 @@ struct WordPairsFeature: Reducer {
                     )
                 }
                 
-                return .send(.stopTimer)
+                return .none
             case .closeApp:
                 appClosingHelper.close()
                 
                 // Wait for a fraction of second, so the user does not see when state gets cleaned
                 return .run { send in
                     try await self.clock.sleep(for: .milliseconds(200))
-                    await send(.stopTimer)
                     await send(.getReadyForRestart)
                 }
             case .getReadyForRestart:
                 state = State()
                 state.shouldRestart = true
                 return .none
-            case .restartGame:
+            case .startGame:
                 state = State()
-                return .concatenate([
+                state.timer = TimerFeature.State()
+                return .concatenate(
                     .send(.fetchTasks),
-                    .send(.startTimer)
-                ])
+                    .send(.timer(.startTimer))
+                )
+            case let .timer(.delegate(action)):
+                switch action {
+                case .timerTicked:
+                    if state.timer?.timerTicksCount ?? 0 >= AppConstants.maxAttemptTime {
+                        return processWrongAttempt(state: &state)
+                    } else {
+                        return .none
+                    }
+                }
+            case .timer(_):
+                return .none
             }
+        }
+        .ifLet(\.timer, action: /Action.timer) {
+            TimerFeature(clock: _clock)
         }
     }
     
